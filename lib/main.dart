@@ -4,11 +4,23 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+// State are the information that can be changed during the lifetime of the widget.
+// If we want to change the state of the widget, we need to use StatefulWidget.
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  void afunction() {
-    print("Button is passed!");
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  double bankBalance = 0.0;
+
+  void addMoney() {
+    setState(() {
+      bankBalance += 100.0;
+    });
   }
 
   @override
@@ -29,14 +41,16 @@ class MyApp extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
+                Expanded(
                   flex: 9,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Bank Balance"),
-                      SizedBox(height: 20),
-                      Text("0"),
+                      const Text('Bank Balance'),
+                      const SizedBox(height: 20),
+                      Text(
+                        '\$$bankBalance',
+                      ),
                     ],
                   ),
                 ),
@@ -47,8 +61,8 @@ class MyApp extends StatelessWidget {
                         backgroundColor: Colors.red[800],
                         minimumSize: const Size(double.infinity, 0),
                       ),
-                      onPressed: afunction,
-                      child: const Text("Add Money")),
+                      onPressed: addMoney,
+                      child: const Text('Add Money')),
                 )
               ],
             ),
