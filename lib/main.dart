@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,9 +18,25 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   double bankBalance = 0.0;
 
-  void addMoney() {
+  void addMoney() async {
     setState(() {
       bankBalance += 100.0;
+    });
+
+    // Obtain shared preferences.
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Save an double value to 'decimal' key.
+    await prefs.setDouble('bankBalance', bankBalance);
+  }
+
+  void loadBalance() async {
+    // Obtain shared preferences.
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      // Try reading data from the counter key. If it does not exist, return 0.
+      bankBalance = prefs.getDouble('bankBalance') ?? 0.0;
     });
   }
 
@@ -51,6 +68,9 @@ class _MyAppState extends State<MyApp> {
                       Text(
                         '\$$bankBalance',
                       ),
+                      OutlinedButton(
+                          onPressed: loadBalance,
+                          child: const Text('Load Balance'))
                     ],
                   ),
                 ),
@@ -63,7 +83,7 @@ class _MyAppState extends State<MyApp> {
                       ),
                       onPressed: addMoney,
                       child: const Text('Add Money')),
-                )
+                ),
               ],
             ),
           )),
