@@ -1,3 +1,4 @@
+import 'package:billionaireapp/add_money_button.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,6 +42,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void initState() {
+    loadBalance();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(),
@@ -68,22 +75,10 @@ class _MyAppState extends State<MyApp> {
                       Text(
                         '\$$bankBalance',
                       ),
-                      OutlinedButton(
-                          onPressed: loadBalance,
-                          child: const Text('Load Balance'))
                     ],
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[800],
-                        minimumSize: const Size(double.infinity, 0),
-                      ),
-                      onPressed: addMoney,
-                      child: const Text('Add Money')),
-                ),
+                AddMoneyButton(addMoneyFunction: addMoney),
               ],
             ),
           )),
